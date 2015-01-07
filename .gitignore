@@ -5,4 +5,4 @@ build/
 *.iml
 *.class
 .DS_Store
-
+~*
