@@ -2428,6 +2428,8 @@
             "id" : "GAME_005",
             "name" : "The Coin",
             "type" : "Spell",
+            "rarity" : "Common",
+            "cost" : "0",
             "text" : "Gain 1 Mana Crystal this turn only."
         },
         {
@@ -10408,6 +10410,7 @@
             "id" : "GVG_028t",
             "name" : "Gallywix's Coin",
             "type" : "Spell",
+            "rarity" : "Common",
             "cost" : 0,
             "text" : "Gain 1 Mana Crystal this turn only.\n<i>(Won't trigger Gallywix.)</i>"
         },
