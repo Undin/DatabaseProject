@@ -2428,7 +2428,7 @@
             "id" : "GAME_005",
             "name" : "The Coin",
             "type" : "Spell",
-            "rarity" : "Common",
+            "rarity" : "Free",
             "cost" : "0",
             "text" : "Gain 1 Mana Crystal this turn only."
         },
@@ -9809,6 +9809,7 @@
             "id" : "PART_001",
             "name" : "Armor Plating",
             "type" : "Spell",
+            "rarity" : "Free",
             "cost" : 1,
             "text" : "Give a minion +1 Health.",
             "artist" : "Nutchapol Thitinunthakorn"
@@ -10212,6 +10213,7 @@
             "id" : "PART_005",
             "name" : "Emergency Coolant",
             "type" : "Spell",
+            "rarity" : "Free",
             "cost" : 1,
             "text" : "<b>Freeze</b> a minion.",
             "artist" : "Peerasak Senalai",
@@ -10298,6 +10300,7 @@
             "id" : "PART_004",
             "name" : "Finicky Cloakfield",
             "type" : "Spell",
+            "rarity" : "Free",
             "cost" : 1,
             "text" : "Give a friendly minion <b>Stealth</b> until your next turn.",
             "artist" : "Nutchapol Thitinunthakorn"
@@ -10410,7 +10413,7 @@
             "id" : "GVG_028t",
             "name" : "Gallywix's Coin",
             "type" : "Spell",
-            "rarity" : "Common",
+            "rarity" : "Free",
             "cost" : 0,
             "text" : "Gain 1 Mana Crystal this turn only.\n<i>(Won't trigger Gallywix.)</i>"
         },
@@ -11267,6 +11270,7 @@
             "id" : "PART_006",
             "name" : "Reversing Switch",
             "type" : "Spell",
+            "rarity" : "Free",
             "cost" : 1,
             "text" : "Swap a minion's Attack and Health.",
             "artist" : "Nutthapon Petthai"
@@ -11275,6 +11279,7 @@
             "id" : "PART_003",
             "name" : "Rusty Horn",
             "type" : "Spell",
+            "rarity" : "Free",
             "cost" : 1,
             "text" : "Give a minion <b>Taunt</b>.",
             "artist" : "Peerasak Senalai"
@@ -11630,6 +11635,7 @@
             "id" : "PART_002",
             "name" : "Time Rewinder",
             "type" : "Spell",
+            "rarity" : "Free",
             "cost" : 1,
             "text" : "Return a friendly minion to your hand.",
             "artist" : "Nutthapon Petthai"
@@ -11871,6 +11877,7 @@
             "id" : "PART_007",
             "name" : "Whirling Blades",
             "type" : "Spell",
+            "rarity" : "Free",
             "cost" : 1,
             "text" : "Give a minion +1 Attack.",
             "artist" : "Nutchapol Thitinunthakorn"
