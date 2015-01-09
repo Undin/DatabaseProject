@@ -74,7 +74,7 @@ CREATE TABLE has_effect (
 
 CREATE TABLE hero_cards (
     hero_id INTEGER PRIMARY KEY REFERENCES heroes,
-    card_id INTEGER REFERENCES cards
+    card_id INTEGER NOT NULL REFERENCES cards
 );
 
 CREATE TABLE has_card (
