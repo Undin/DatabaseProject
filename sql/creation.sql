@@ -25,13 +25,13 @@ CREATE EXTENSION IF NOT EXISTS citext;
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 CREATE TABLE heroes (
-    id     SERIAL PRIMARY KEY,
+    id     INTEGER PRIMARY KEY,
     name   TEXT UNIQUE NOT NULL,
     health uint        NOT NULL DEFAULT 30
 );
 
 CREATE TABLE effects (
-    id   SERIAL PRIMARY KEY,
+    id   INTEGER PRIMARY KEY,
     name TEXT UNIQUE NOT NULL
 );
 
@@ -46,12 +46,12 @@ CREATE TABLE players (
 
 CREATE TABLE cards (
     id          SERIAL PRIMARY KEY,
-    name        TEXT UNIQUE NOT NULL,
+    name        TEXT        NOT NULL,
     description TEXT,
     rarity      rarity_type NOT NULL,
     type        card_type   NOT NULL,
-    cost        uint        NOT NULL,
     collectible BOOLEAN     NOT NULL DEFAULT TRUE,
+    cost        uint        NOT NULL,
     health      uint,
     attack      uint,
     durability  uint,
