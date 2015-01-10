@@ -32,7 +32,7 @@ public class Test {
 
     public static final String EFFECTS_FIRST_LINE = "INSERT INTO effects (effect_id, effect_name) VALUES";
     public static final String HEROES_FIRST_LINE = "INSERT INTO heroes (hero_id, class, hero_name, hero_health) VALUES";
-    public static final String CARDS_FIRST_LINE = "INSERT INTO cards (card_id, card_name, description, rarity, type, collectible, cost, health, attack, durability, race) VALUES";
+//    public static final String CARDS_FIRST_LINE = "INSERT INTO cards (card_id, card_name, description, rarity, type, collectible, cost, health, attack, durability, race) VALUES";
     public static final String HERO_CARDS_FIRST_LINE = "INSERT INTO hero_cards (card_id, hero_id) VALUES";
     public static final String HAS_EFFECT_FIRST_LINE = "INSERT INTO has_effect (card_id, effect_id) VALUES";
 
@@ -62,7 +62,7 @@ public class Test {
             for (int i = 0; i < set.length(); i++) {
                 JSONObject cardObject = set.getJSONObject(i);
                 if (cardObject.has(TYPE) && TYPES.contains(cardObject.getString(TYPE)) && cardObject.has(RARITY) && cardObject.has(NAME) && cardObject.has(COST)) {
-                    Card card = new Card(cardObject);
+                    Card card = new Card(cardObject, setKey);
                     cards.add(card);
 
                     if (cardObject.has(PLAYER_CLASS)) {
@@ -103,7 +103,7 @@ public class Test {
     }
 
     public static void printCardsInsertion(List<Card> cards) throws FileNotFoundException {
-        printInsertion(CARDS_FILE, CARDS_FIRST_LINE, cards.stream().map(i -> "    " + i.toString()).collect(Collectors.toList()));
+        printInsertion(CARDS_FILE, Card.INSERT_FIRST_LINE, cards.stream().map(i -> "    " + i.toString()).collect(Collectors.toList()));
     }
 
     public static void printHeroCards(List<Pair<Integer, Integer>> pairs) throws FileNotFoundException {

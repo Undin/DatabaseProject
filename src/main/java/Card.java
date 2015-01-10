@@ -5,6 +5,8 @@ import org.json.JSONObject;
  */
 public class Card {
 
+    public static final String INSERT_FIRST_LINE = "INSERT INTO cards (card_id, card_name, description, rarity, type, set, collectible, cost, health, attack, durability, race) VALUES";
+
     private static final String NAME = "name";
     private static final String TEXT = "text";
     private static final String RARITY = "rarity";
@@ -21,10 +23,12 @@ public class Card {
     private static int globalID = 1;
 
     private final JSONObject object;
+    private final String set;
     private final int id;
 
-    public Card(JSONObject object) {
+    public Card(JSONObject object, String set) {
         this.object = object;
+        this.set = set;
         id = globalID++;
     }
 
@@ -45,6 +49,7 @@ public class Card {
         builder.append(getValue(object, TEXT)).append(DELIMITER);
         builder.append(getValue(object, RARITY)).append(DELIMITER);
         builder.append(getValue(object, TYPE)).append(DELIMITER);
+        builder.append(toSqlString(set)).append(DELIMITER);
         builder.append(object.optBoolean(COLLECTIBLE, false)).append(DELIMITER);
         builder.append(getValue(object, COST)).append(DELIMITER);
         builder.append(getValue(object, HEALTH)).append(DELIMITER);
@@ -63,16 +68,19 @@ public class Card {
         if (object.has(key)) {
             Object o = object.get(key);
             if (o instanceof String) {
-                String str = (String) o;
-                if (str.contains("'")) {
-                    return "E" + wrap(str.replaceAll("'", "\\\\'"));
-                }
-                return wrap(str);
+                return toSqlString((String) o);
             } else {
                 return o.toString();
             }
         } else {
             return "NULL";
         }
+    }
+
+    private static String toSqlString(String str) {
+        if (str.contains("'")) {
+            return "E" + wrap(str.replaceAll("'", "\\\\'"));
+        }
+        return wrap(str);
     }
 }
