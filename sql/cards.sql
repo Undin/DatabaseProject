@@ -1,4 +1,4 @@
-INSERT INTO cards (id, name, description, rarity, type, collectible, cost, health, attack, durability, race) VALUES
+INSERT INTO cards (card_id, card_name, description, rarity, type, collectible, cost, health, attack, durability, race) VALUES
     (1, 'Acidic Swamp Ooze', E'<b>Battlecry:</b> Destroy your opponent\'s weapon.', 'Common', 'Minion', true, 2, 2, 3, NULL, NULL),
     (2, 'Ancestral Healing', 'Restore a minion to full Health and give it <b>Taunt</b>.', 'Free', 'Spell', true, 0, NULL, NULL, NULL, NULL),
     (3, 'Animal Companion', 'Summon a random Beast Companion.', 'Common', 'Spell', true, 3, NULL, NULL, NULL, NULL),

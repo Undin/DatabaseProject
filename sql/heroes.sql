@@ -1,4 +1,4 @@
-INSERT INTO heroes (id, class, name, health) VALUES
+INSERT INTO heroes (hero_id, class, hero_name, hero_health) VALUES
     (1, 'Priest', 'Anduin Wrynn', 30),
     (2, 'Warrior', 'Garrosh Hellscream', 30),
     (3, 'Warlock', E'Gul\'dan', 30),

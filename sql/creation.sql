@@ -25,20 +25,20 @@ CREATE EXTENSION IF NOT EXISTS citext;
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 CREATE TABLE heroes (
-    id     INTEGER PRIMARY KEY,
+    hero_id     INTEGER PRIMARY KEY,
     class  TEXT        NOT NULL,
-    name   TEXT UNIQUE NOT NULL,
-    health uint        NOT NULL DEFAULT 30
+    hero_name   TEXT UNIQUE NOT NULL,
+    hero_health uint        NOT NULL DEFAULT 30
 );
 
 CREATE TABLE effects (
-    id   INTEGER PRIMARY KEY,
-    name TEXT UNIQUE NOT NULL
+    effect_id   INTEGER PRIMARY KEY,
+    effect_name TEXT UNIQUE NOT NULL
 );
 
 CREATE TABLE players (
-    id            SERIAL PRIMARY KEY,
-    name          CITEXT UNIQUE NOT NULL,
+    player_id            SERIAL PRIMARY KEY,
+    player_name          CITEXT UNIQUE NOT NULL,
     email         CITEXT UNIQUE NOT NULL,
     password_hash TEXT          NOT NULL,
     money         uint          NOT NULL DEFAULT 0,
@@ -46,8 +46,8 @@ CREATE TABLE players (
 );
 
 CREATE TABLE cards (
-    id          SERIAL PRIMARY KEY,
-    name        TEXT        NOT NULL,
+    card_id          SERIAL PRIMARY KEY,
+    card_name        TEXT        NOT NULL,
     description TEXT,
     rarity      rarity_type NOT NULL,
     type        card_type   NOT NULL,
@@ -60,11 +60,11 @@ CREATE TABLE cards (
 );
 
 CREATE TABLE decks (
-    id        SERIAL PRIMARY KEY,
-    name      TEXT    NOT NULL,
+    deck_id        SERIAL PRIMARY KEY,
+    deck_name      TEXT    NOT NULL,
     player_id INTEGER NOT NULL REFERENCES players,
     hero_id   INTEGER NOT NULL REFERENCES heroes,
-    UNIQUE (name, player_id)
+    UNIQUE (deck_name, player_id)
 );
 
 CREATE TABLE has_effect (

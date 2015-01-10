@@ -30,9 +30,9 @@ public class Test {
     public static final String HERO_CARDS_FILE = "hero_cards.sql";
     public static final String HAS_EFFECT_FILE = "has_effect.sql";
 
-    public static final String EFFECTS_FIRST_LINE = "INSERT INTO effects (id, name) VALUES";
-    public static final String HEROES_FIRST_LINE = "INSERT INTO heroes (id, class, name, health) VALUES";
-    public static final String CARDS_FIRST_LINE = "INSERT INTO cards (id, name, description, rarity, type, collectible, cost, health, attack, durability, race) VALUES";
+    public static final String EFFECTS_FIRST_LINE = "INSERT INTO effects (effect_id, effect_name) VALUES";
+    public static final String HEROES_FIRST_LINE = "INSERT INTO heroes (hero_id, class, hero_name, hero_health) VALUES";
+    public static final String CARDS_FIRST_LINE = "INSERT INTO cards (card_id, card_name, description, rarity, type, collectible, cost, health, attack, durability, race) VALUES";
     public static final String HERO_CARDS_FIRST_LINE = "INSERT INTO hero_cards (card_id, hero_id) VALUES";
     public static final String HAS_EFFECT_FIRST_LINE = "INSERT INTO has_effect (card_id, effect_id) VALUES";
 

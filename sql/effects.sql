@@ -1,4 +1,4 @@
-INSERT INTO effects (id, name) VALUES
+INSERT INTO effects (effect_id, effect_name) VALUES
     (1, 'Taunt'),
     (2, 'HealTarget'),
     (3, 'Windfury'),
