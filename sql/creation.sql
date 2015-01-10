@@ -26,6 +26,7 @@ CREATE EXTENSION IF NOT EXISTS pgcrypto;
 
 CREATE TABLE heroes (
     id     INTEGER PRIMARY KEY,
+    class  TEXT        NOT NULL,
     name   TEXT UNIQUE NOT NULL,
     health uint        NOT NULL DEFAULT 30
 );
@@ -73,8 +74,8 @@ CREATE TABLE has_effect (
 );
 
 CREATE TABLE hero_cards (
-    hero_id INTEGER PRIMARY KEY REFERENCES heroes,
-    card_id INTEGER NOT NULL REFERENCES cards
+    card_id INTEGER PRIMARY KEY REFERENCES cards,
+    hero_id INTEGER NOT NULL REFERENCES heroes
 );
 
 CREATE TABLE has_card (
