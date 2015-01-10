@@ -20,7 +20,7 @@ public class Test {
     public static final String COST = "cost";
     public static final String PLAYER_CLASS = "playerClass";
 
-    public static final String[] EFFECTS = {"Taunt", "HealTarget", "Windfury", "Poisonous", "Charge", "Combo", "Battlecry", "AffectedBySpellPower", "Secret", "Deathrattle", "Silence", "Enrage", "Stealth", "ImmuneToSpellpower", "Spellpower", "Aura", "AdjacentBuff", "Divine Shield", "Freeze"};
+    public static final List<String> EFFECTS = Arrays.asList("Taunt", "HealTarget", "Windfury", "Poisonous", "Charge", "Combo", "Battlecry", "AffectedBySpellPower", "Secret", "Deathrattle", "Silence", "Enrage", "Stealth", "ImmuneToSpellpower", "Spellpower", "Aura", "AdjacentBuff", "Divine Shield", "Freeze");
     public static final List<String> TYPES = Arrays.asList("Minion", "Weapon", "Spell");
 
     public static final String SQL_DIRECTORY = "./sql/";
@@ -28,21 +28,23 @@ public class Test {
     public static final String EFFECTS_FILE = "effects.sql";
     public static final String HEROES_FILE = "heroes.sql";
     public static final String HERO_CARDS_FILE = "hero_cards.sql";
+    public static final String HAS_EFFECT_FILE = "has_effect.sql";
 
     public static final String EFFECTS_FIRST_LINE = "INSERT INTO effects (id, name) VALUES";
     public static final String HEROES_FIRST_LINE = "INSERT INTO heroes (id, class, name, health) VALUES";
     public static final String CARDS_FIRST_LINE = "INSERT INTO cards (id, name, description, rarity, type, collectible, cost, health, attack, durability, race) VALUES";
     public static final String HERO_CARDS_FIRST_LINE = "INSERT INTO hero_cards (card_id, hero_id) VALUES";
+    public static final String HAS_EFFECT_FIRST_LINE = "INSERT INTO has_effect (card_id, effect_id) VALUES";
 
     public static void main(String[] args) throws FileNotFoundException {
         BufferedReader reader = new BufferedReader(new FileReader("./AllSets.enUS.json"));
         String allSets = reader.lines().collect(Collectors.joining());
         JSONObject object = new JSONObject(allSets);
 
-        List<String> effects = Arrays.asList(EFFECTS);
         List<Pair<String, String>> heroes = new ArrayList<>();
         List<Card> cards = new ArrayList<>();
         List<Pair<Integer, Integer>> heroCards = new ArrayList<>();
+        List<Pair<Integer, Integer>> hasEffect = new ArrayList<>();
 
         Map<String, Integer> classToIndex = new HashMap<>();
 
@@ -66,14 +68,22 @@ public class Test {
                     if (cardObject.has(PLAYER_CLASS)) {
                         heroCards.add(Pair.of(card.getId(), classToIndex.get(cardObject.getString(PLAYER_CLASS))));
                     }
+                    if (cardObject.has(MECHANICS)) {
+                        JSONArray mechanics = cardObject.getJSONArray(MECHANICS);
+                        for (int j = 0; j < mechanics.length(); j++) {
+                            String effect = mechanics.getString(j);
+                            hasEffect.add(Pair.of(card.getId(), EFFECTS.indexOf(effect) + 1));
+                        }
+                    }
                 }
             }
         }
 
-        printEffectInsertion(effects);
+        printEffectInsertion(EFFECTS);
         printHeroesInsertion(heroes);
         printCardsInsertion(cards);
         printHeroCards(heroCards);
+        printHasEffect(hasEffect);
     }
 
     public static void printEffectInsertion(List<String> effects) throws FileNotFoundException {
@@ -98,6 +108,10 @@ public class Test {
 
     public static void printHeroCards(List<Pair<Integer, Integer>> pairs) throws FileNotFoundException {
         printInsertion(HERO_CARDS_FILE, HERO_CARDS_FIRST_LINE, pairs.stream().map(p -> "    (" + p.first + ", " + p.second + ")").collect(Collectors.toList()));
+    }
+
+    public static void printHasEffect(List<Pair<Integer, Integer>> pairs) throws FileNotFoundException {
+        printInsertion(HAS_EFFECT_FILE, HAS_EFFECT_FIRST_LINE, pairs.stream().map(p -> "    (" + p.first + ", " + p.second + ")").collect(Collectors.toList()));
     }
 
     private static void printInsertion(String filename, String firstLine, List<String> values) throws FileNotFoundException {
