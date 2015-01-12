@@ -1,9 +1,14 @@
+package com.warrior.databaseproject;
+
 import org.json.JSONObject;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by warrior on 09.01.15.
  */
-public class Card {
+public class Card implements Values {
 
     public static final String INSERT_FIRST_LINE = "INSERT INTO cards (card_id, card_name, description, rarity, type, set, collectible, cost, health, attack, durability, race) VALUES";
 
@@ -26,6 +31,8 @@ public class Card {
     private final String set;
     private final int id;
 
+    private final List<Effect> effects = new ArrayList<>();
+
     public Card(JSONObject object, String set) {
         this.object = object;
         this.set = set;
@@ -36,8 +43,41 @@ public class Card {
         return id;
     }
 
+    public String getName() {
+        return object.getString(NAME);
+    }
+
+    public boolean isCollectible() {
+        return object.has(COLLECTIBLE) && object.getBoolean(COLLECTIBLE);
+    }
+
+    public List<Effect> getEffects() {
+        return effects;
+    }
+
     public JSONObject getObject() {
         return object;
+    }
+
+    public void addEffect(Effect effect) {
+        effects.add(effect);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Card)) return false;
+
+        Card card = (Card) o;
+
+        if (id != card.id) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        return id;
     }
 
     @Override
@@ -49,7 +89,7 @@ public class Card {
         builder.append(getValue(object, TEXT)).append(DELIMITER);
         builder.append(getValue(object, RARITY)).append(DELIMITER);
         builder.append(getValue(object, TYPE)).append(DELIMITER);
-        builder.append(toSqlString(set)).append(DELIMITER);
+        builder.append(Utils.toSqlString(set)).append(DELIMITER);
         builder.append(object.optBoolean(COLLECTIBLE, false)).append(DELIMITER);
         builder.append(getValue(object, COST)).append(DELIMITER);
         builder.append(getValue(object, HEALTH)).append(DELIMITER);
@@ -60,27 +100,16 @@ public class Card {
         return builder.toString();
     }
 
-    private static String wrap(String str) {
-        return "'" + str + "'";
-    }
-
     private static String getValue(JSONObject object, String key) {
         if (object.has(key)) {
             Object o = object.get(key);
             if (o instanceof String) {
-                return toSqlString((String) o);
+                return Utils.toSqlString((String) o);
             } else {
                 return o.toString();
             }
         } else {
             return "NULL";
         }
-    }
-
-    private static String toSqlString(String str) {
-        if (str.contains("'")) {
-            return "E" + wrap(str.replaceAll("'", "\\\\'"));
-        }
-        return wrap(str);
     }
 }
