@@ -125,6 +125,7 @@ BEGIN
                 FROM heroes LOOP
         INSERT INTO hero_statistics (player_id, hero_id) VALUES (NEW.player_id, hero.hero_id);
     END LOOP;
+    RETURN NEW;
 END;
 $$ LANGUAGE 'plpgsql';
 
