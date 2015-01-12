@@ -3,6 +3,7 @@
 sqlDir="/Users/warrior/Programming/DatabaseProject/sql"
 psql HSDatabase -f "$sqlDir/removal.sql"
 psql HSDatabase -f "$sqlDir/creation.sql"
+psql HSDatabase -f "$sqlDir/indexes.sql"
 psql HSDatabase -f "$sqlDir/functions.sql"
 psql HSDatabase -f "$sqlDir/cards.sql"
 psql HSDatabase -f "$sqlDir/effects.sql"

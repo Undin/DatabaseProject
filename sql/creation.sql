@@ -64,7 +64,7 @@ CREATE TABLE IF NOT EXISTS decks (
     deck_name TEXT    NOT NULL,
     player_id INTEGER NOT NULL REFERENCES players ON DELETE CASCADE,
     hero_id   INTEGER NOT NULL REFERENCES heroes ON DELETE CASCADE,
-    UNIQUE (deck_name, player_id)
+    UNIQUE (player_id, deck_name)
 );
 
 CREATE TABLE IF NOT EXISTS has_effect (
