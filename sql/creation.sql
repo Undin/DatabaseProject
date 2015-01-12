@@ -16,6 +16,34 @@ CREATE TYPE race_type AS ENUM (
     'Murloc',
     'Beast',
     'Dragon');
+CREATE TYPE rank_type AS ENUM (
+    'Angry Chicken',
+    'Leper Gnome',
+    'Argent Squire',
+    'Murloc Raider',
+    'Southsea Deckhand',
+    'Shieldbearer',
+    'Novice Engineer',
+    E'Sorcerer\'s Apprentice',
+    'Tauren Warrior',
+    'Questing Adventurer',
+    'Silvermoon Guardian',
+    'Raid Leader',
+    'Dread Corsair',
+    'Warsong Commander',
+    'Big Game Hunter',
+    'Ogre Magi',
+    'Silver Hand Knight',
+    'Frostwolf Warlord',
+    'Sunwalker',
+    'Ancient of War',
+    'Sea Giant',
+    'Mountain Giant',
+    'Molten Giant',
+    'The Black Knight',
+    'Innkeeper',
+    'Legend'
+);
 
 CREATE DOMAIN nickname AS VARCHAR(12) CHECK (VALUE ~ E'^[a-zA-Z][a-zA-Z0-9]{2,11}$');
 CREATE DOMAIN uint AS INTEGER CHECK (VALUE >= 0);
@@ -40,6 +68,8 @@ CREATE TABLE IF NOT EXISTS effects (
 CREATE TABLE players (
     player_id   SERIAL PRIMARY KEY,
     player_name nickname UNIQUE NOT NULL,
+    rank        rank_type     NOT NULL DEFAULT 'Angry Chicken',
+    stars       uint            NOT NULL DEFAULT 0,
     money       uint            NOT NULL DEFAULT 0,
     dust        uint            NOT NULL DEFAULT 0
 );
@@ -81,14 +111,14 @@ CREATE TABLE IF NOT EXISTS hero_cards (
 CREATE TABLE IF NOT EXISTS has_card (
     card_id   INTEGER NOT NULL REFERENCES cards ON DELETE CASCADE,
     player_id INTEGER NOT NULL REFERENCES players ON DELETE CASCADE,
-    quantity  qnt    NOT NULL,
+    quantity  qnt     NOT NULL,
     PRIMARY KEY (player_id, card_id)
 );
 
 CREATE TABLE IF NOT EXISTS in_deck (
-    card_id  INTEGER NOT NULL REFERENCES cards ON DELETE CASCADE,
-    deck_id  INTEGER NOT NULL REFERENCES decks ON DELETE CASCADE,
-    quantity deck_qnt     NOT NULL,
+    card_id  INTEGER  NOT NULL REFERENCES cards ON DELETE CASCADE,
+    deck_id  INTEGER  NOT NULL REFERENCES decks ON DELETE CASCADE,
+    quantity deck_qnt NOT NULL,
     PRIMARY KEY (deck_id, card_id)
 );
 
