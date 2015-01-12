@@ -16,39 +16,12 @@ CREATE TYPE race_type AS ENUM (
     'Murloc',
     'Beast',
     'Dragon');
-CREATE TYPE rank_type AS ENUM (
-    'Angry Chicken',
-    'Leper Gnome',
-    'Argent Squire',
-    'Murloc Raider',
-    'Southsea Deckhand',
-    'Shieldbearer',
-    'Novice Engineer',
-    E'Sorcerer\'s Apprentice',
-    'Tauren Warrior',
-    'Questing Adventurer',
-    'Silvermoon Guardian',
-    'Raid Leader',
-    'Dread Corsair',
-    'Warsong Commander',
-    'Big Game Hunter',
-    'Ogre Magi',
-    'Silver Hand Knight',
-    'Frostwolf Warlord',
-    'Sunwalker',
-    'Ancient of War',
-    'Sea Giant',
-    'Mountain Giant',
-    'Molten Giant',
-    'The Black Knight',
-    'Innkeeper',
-    'Legend'
-);
 
 CREATE DOMAIN nickname AS VARCHAR(12) CHECK (VALUE ~ E'^[a-zA-Z][a-zA-Z0-9]{2,11}$');
 CREATE DOMAIN uint AS INTEGER CHECK (VALUE >= 0);
 CREATE DOMAIN qnt AS INTEGER CHECK (VALUE > 0);
 CREATE DOMAIN deck_qnt AS INTEGER CHECK (VALUE > 0 AND VALUE <= 2);
+CREATE DOMAIN rank_type AS INTEGER CHECK (VALUE >= 0 AND VALUE <= 25);
 
 CREATE EXTENSION IF NOT EXISTS citext;
 CREATE EXTENSION IF NOT EXISTS pgcrypto;
@@ -68,7 +41,7 @@ CREATE TABLE IF NOT EXISTS effects (
 CREATE TABLE players (
     player_id   SERIAL PRIMARY KEY,
     player_name nickname UNIQUE NOT NULL,
-    rank        rank_type     NOT NULL DEFAULT 'Angry Chicken',
+    rank        rank_type       NOT NULL DEFAULT 25,
     stars       uint            NOT NULL DEFAULT 0,
     money       uint            NOT NULL DEFAULT 0,
     dust        uint            NOT NULL DEFAULT 0
