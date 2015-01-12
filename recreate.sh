@@ -11,5 +11,3 @@ psql HSDatabase -f "$sqlDir/has_effect.sql"
 psql HSDatabase -f "$sqlDir/has_card.sql"
 psql HSDatabase -f "$sqlDir/decks.sql"
 psql HSDatabase -f "$sqlDir/in_deck.sql"
-
-
