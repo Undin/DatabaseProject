@@ -26,6 +26,8 @@ public class Test {
     public static final List<String> EFFECTS = Arrays.asList("Taunt", "HealTarget", "Windfury", "Poisonous", "Charge", "Combo", "Battlecry", "AffectedBySpellPower", "Secret", "Deathrattle", "Silence", "Enrage", "Stealth", "ImmuneToSpellpower", "Spellpower", "Aura", "AdjacentBuff", "Divine Shield", "Freeze");
     public static final List<String> TYPES = Arrays.asList("Minion", "Weapon", "Spell");
 
+    public static final String DECKS_DIR = "decks";
+    public static final String STATISTICS_FILE = "statistics.txt";
     public static final String SQL_DIRECTORY = "./sql/";
     public static final String CARDS_FILE = "cards.sql";
     public static final String EFFECTS_FILE = "effects.sql";
@@ -36,11 +38,16 @@ public class Test {
     public static final String DECKS_FILE = "decks.sql";
     public static final String IN_DECK_FILE = "in_deck.sql";
     public static final String HAS_CARD_FILE = "has_card.sql";
+    public static final String HERO_STATISTICS_FILE = "hero_statistics.sql";
 
     public static final String HERO_CARDS_FIRST_LINE = "INSERT INTO hero_cards (card_id, hero_id) VALUES";
     public static final String HAS_EFFECT_FIRST_LINE = "INSERT INTO has_effect (card_id, effect_id) VALUES";
     public static final String IN_DECK_FIRST_LINE = "INSERT INTO in_deck (card_id, deck_id, quantity) VALUES";
     public static final String HAS_CARD_FIRST_LINE = "INSERT INTO has_card (card_id, player_id, quantity) VALUES";
+
+    private static Map<String, Card> cardNameToCollectibleCards = new HashMap<>();
+    private static Map<String, Hero> classNameToHero = new HashMap<>();
+    private static Map<String, Effect> effectNameToEffect = new HashMap<>();
 
     public static void main(String[] args) throws IOException {
         JSONObject object = null;
@@ -55,9 +62,6 @@ public class Test {
         List<Player> players = new ArrayList<>();
         List<Deck> decks = new ArrayList<>();
 
-        Map<String, Card> cardNameToCollectibleCards = new HashMap<>();
-        Map<String, Hero> classNameToHero = new HashMap<>();
-        Map<String, Effect> effectNameToEffect = new HashMap<>();
 
         for (String effectName : EFFECTS) {
             Effect effect = new Effect(effectName);
@@ -108,7 +112,9 @@ public class Test {
             String playerName = playerDir.getName();
             Player player = new Player(playerName);
             players.add(player);
-            for (File deckFile : playerDir.listFiles()) {
+            extractStatistics(player, playerDir);
+            File decksDir = new File(playerDir, DECKS_DIR);
+            for (File deckFile : decksDir.listFiles()) {
                 String deckName = deckFile.getName().replaceAll("(.*)\\..*", "$1");
                 try (BufferedReader reader = new BufferedReader(new FileReader(deckFile))) {
                     String className = reader.readLine().trim();
@@ -145,6 +151,31 @@ public class Test {
         printHasCard(players);
         // in deck
         printInDeck(decks);
+        // hero statistics
+        printHeroStatistics(players);
+    }
+
+    private static void extractStatistics(Player player, File playerDir) throws IOException {
+        File statisticsFile = new File(playerDir, STATISTICS_FILE);
+        try (BufferedReader reader = new BufferedReader(new FileReader(statisticsFile))) {
+            String[] line = reader.readLine().split(" "); // rank starts money dust
+            int rank = Integer.parseInt(line[0]);
+            int stars = Integer.parseInt(line[1]);
+            int money = Integer.parseInt(line[2]);
+            int dust = Integer.parseInt(line[3]);
+            player.setRank(rank);
+            player.setStars(stars);
+            player.setMoney(money);
+            player.setDust(dust);
+            reader.lines().map(s -> s.split(" ")).forEach(arr -> {
+                        Hero hero = classNameToHero.get(arr[0]);
+                        int level = Integer.parseInt(arr[1]);
+                        int wins = Integer.parseInt(arr[2]);
+                        Statistics statistics = new Statistics(hero, level, wins);
+                        player.addStatistics(statistics);
+                    }
+            );
+        }
     }
 
     public static void printHeroCards(List<Hero> heroes) throws FileNotFoundException {
@@ -179,6 +210,15 @@ public class Test {
             pairs.addAll(cards.keySet().stream().map(card -> "    " + Utils.toString(card.getId(), player.getId(), cards.get(card))).collect(Collectors.toList()));
         }
         printInsertion(HAS_CARD_FILE, HAS_CARD_FIRST_LINE, pairs);
+    }
+
+    public static void printHeroStatistics(List<Player> players) throws FileNotFoundException {
+        List<String> pairs = new ArrayList<>();
+        for (Player player : players) {
+            List<Statistics> statistics = player.getStatistics();
+            pairs.addAll(statistics.stream().map(st -> "    " + st).collect(Collectors.toList()));
+        }
+        printInsertion(HERO_STATISTICS_FILE, Statistics.HERO_STATISTICS_FIRST_LINE, pairs);
     }
 
     private static void printInsertion(List<? extends Values> values, String filename, String firstLine) throws FileNotFoundException {

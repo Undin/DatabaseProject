@@ -9,4 +9,5 @@ INSERT INTO decks (deck_id, deck_name, player_id, hero_id) VALUES
     (8, 'Mech Mage', 1, 4),
     (9, 'Mech Shaman', 1, 7),
     (10, 'ArgoWarrior', 2, 2),
-    (11, 'MechZoo', 2, 3);
+    (11, 'ControlPaladin', 2, 8),
+    (12, 'MechZoo', 2, 3);

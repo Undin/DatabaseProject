@@ -10,7 +10,7 @@ import java.util.Map;
  */
 public class Player implements Values {
 
-    public static final String PLAYERS_FIRST_LINE = "INSERT INTO players VALUES";
+    public static final String PLAYERS_FIRST_LINE = "INSERT INTO players (player_name, rank, stars, money, dust) VALUES";
 
     private static int globalId = 1;
 
@@ -19,7 +19,12 @@ public class Player implements Values {
 
     private final Map<Card, Integer> cards = new HashMap<>();
     private final List<Deck> decks = new ArrayList<>();
+    private final List<Statistics> statistics = new ArrayList<>();
 
+    private int rank;
+    private int stars;
+    private int money;
+    private int dust;
 
     public Player(String name) {
         this.name = name;
@@ -55,8 +60,49 @@ public class Player implements Values {
         deck.setPlayer(this);
     }
 
+    public int getRank() {
+        return rank;
+    }
+
+    public void setRank(int rank) {
+        this.rank = rank;
+    }
+
+    public int getStars() {
+        return stars;
+    }
+
+    public void setStars(int stars) {
+        this.stars = stars;
+    }
+
+    public int getMoney() {
+        return money;
+    }
+
+    public void setMoney(int money) {
+        this.money = money;
+    }
+
+    public int getDust() {
+        return dust;
+    }
+
+    public void setDust(int dust) {
+        this.dust = dust;
+    }
+
+    public List<Statistics> getStatistics() {
+        return statistics;
+    }
+
+    public void addStatistics(Statistics st) {
+        st.setPlayer(this);
+        statistics.add(st);
+    }
+
     @Override
     public String toString() {
-        return Utils.toString(id, name);
+        return Utils.toString(name, rank, stars, money, dust);
     }
 }

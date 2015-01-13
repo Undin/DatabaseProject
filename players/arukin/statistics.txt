@@ -1,0 +1,10 @@
+5 2 0 1485
+Warlock 60 399
+Paladin 27 27
+Warrior 52 233
+Hunter 43 183
+Mage 38 89
+Druid 37 108
+Priest 57 232
+Rogue 37 108
+Shaman 31 54
