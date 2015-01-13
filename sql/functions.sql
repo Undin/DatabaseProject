@@ -102,7 +102,7 @@ ON in_deck FOR EACH ROW
 EXECUTE PROCEDURE add_card_into_deck();
 
 
-CREATE OR REPLACE FUNCTION get_player_id(_player_name CITEXT)
+CREATE OR REPLACE FUNCTION get_player_id(_player_name nickname)
     RETURNS INTEGER AS $$
 DECLARE
     id INTEGER;
