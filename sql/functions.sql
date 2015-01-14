@@ -213,3 +213,4 @@ SELECT
 FROM players
 ORDER BY players.rank ASC, players.stars DESC;
 $$ LANGUAGE 'sql';
+
