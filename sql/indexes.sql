@@ -18,4 +18,4 @@ CREATE INDEX heroes_class_index ON heroes USING btree (class); -- hash
 
 CREATE INDEX in_deck_card_id_index ON in_deck USING btree (card_id);
 
-CREATE INDEX players_rank_index ON players USING btree (rank);
+CREATE INDEX players_rank_index ON players USING btree (rank, stars);

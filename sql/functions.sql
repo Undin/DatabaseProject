@@ -101,21 +101,6 @@ BEFORE INSERT OR UPDATE
 ON in_deck FOR EACH ROW
 EXECUTE PROCEDURE add_card_into_deck();
 
-
-CREATE OR REPLACE FUNCTION get_player_id(_player_name nickname)
-    RETURNS INTEGER AS $$
-DECLARE
-    id INTEGER;
-BEGIN
-    SELECT player_id
-    FROM players
-    WHERE player_name = _player_name
-    INTO id;
-    RETURN id;
-END;
-$$ LANGUAGE 'plpgsql';
-
-
 CREATE OR REPLACE FUNCTION create_player_statistics()
     RETURNS TRIGGER AS $$
 DECLARE
@@ -134,3 +119,97 @@ CREATE TRIGGER player_insertion
 AFTER INSERT
 ON players FOR EACH ROW
 EXECUTE PROCEDURE create_player_statistics();
+
+
+CREATE OR REPLACE FUNCTION get_player_id(_player_name nickname)
+    RETURNS INTEGER AS $$
+DECLARE
+    id INTEGER;
+BEGIN
+    SELECT player_id
+    FROM players
+    WHERE player_name = _player_name
+    INTO id;
+    RETURN id;
+END;
+$$ LANGUAGE 'plpgsql';
+
+CREATE OR REPLACE FUNCTION get_all_player_cards(_player_name nickname)
+    RETURNS TABLE(quantity qnt, card_id INTEGER, card_name TEXT, description TEXT, rarity rarity_type, type card_type, set TEXT, collectible BOOLEAN, cost uint, health uint, attack uint, durability uint, race race_type) AS $$
+SELECT
+    has_card.quantity,
+    cards.card_id,
+    cards.card_name,
+    cards.description,
+    cards.rarity,
+    cards.type,
+    cards.set,
+    cards.collectible,
+    cards.cost,
+    cards.health,
+    cards.attack,
+    cards.durability,
+    cards.race
+FROM cards
+    NATURAL JOIN has_card
+    NATURAL JOIN players
+WHERE players.player_name = _player_name;
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION gel_all_player_decks(_player_name nickname)
+    RETURNS TABLE(deck_id INTEGER, deck_name TEXT, class TEXT) AS $$
+SELECT
+    decks.deck_id,
+    decks.deck_name,
+    heroes.class
+FROM decks
+    NATURAL JOIN players
+    NATURAL JOIN heroes
+WHERE players.player_name = _player_name;
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION gel_all_deck_cards(_player_name nickname, _deck_name TEXT)
+    RETURNS TABLE(quantity deck_qnt, card_id INTEGER, card_name TEXT, description TEXT, rarity rarity_type, type card_type, set TEXT, collectible BOOLEAN, cost uint, health uint, attack uint, durability uint, race race_type) AS $$
+SELECT
+    in_deck.quantity,
+    cards.card_id,
+    cards.card_name,
+    cards.description,
+    cards.rarity,
+    cards.type,
+    cards.set,
+    cards.collectible,
+    cards.cost,
+    cards.health,
+    cards.attack,
+    cards.durability,
+    cards.race
+FROM cards
+    NATURAL JOIN in_deck
+    NATURAL JOIN decks
+WHERE decks.player_id = get_player_id(_player_name) AND decks.deck_name = _deck_name
+ORDER BY cards.cost ASC;
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION get_player(_player_name nickname)
+    RETURNS TABLE(player_id INTEGER, rank rank_type, stars uint, money uint, dust uint) AS $$
+SELECT
+    players.player_id,
+    players.rank,
+    players.stars,
+    players.money,
+    players.dust
+FROM players
+WHERE players.player_name = _player_name;
+$$ LANGUAGE 'sql';
+
+CREATE OR REPLACE FUNCTION get_rank_list()
+    RETURNS TABLE(player_id INTEGER, player_name nickname, rank rank_type, stars uint) AS $$
+SELECT
+    players.player_id,
+    players.player_name,
+    players.rank,
+    players.stars
+FROM players
+ORDER BY players.rank ASC, players.stars DESC;
+$$ LANGUAGE 'sql';
