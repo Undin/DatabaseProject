@@ -120,7 +120,7 @@ AFTER INSERT
 ON players FOR EACH ROW
 EXECUTE PROCEDURE create_player_statistics();
 
-
+-- возвращает id игрока по его имени
 CREATE OR REPLACE FUNCTION get_player_id(_player_name nickname)
     RETURNS INTEGER AS $$
 DECLARE
@@ -134,6 +134,7 @@ BEGIN
 END;
 $$ LANGUAGE 'plpgsql';
 
+-- возвращает все карты игрока по его имени
 CREATE OR REPLACE FUNCTION get_all_player_cards(_player_name nickname)
     RETURNS TABLE(quantity qnt, card_id INTEGER, card_name TEXT, description TEXT, rarity rarity_type, type card_type, set TEXT, collectible BOOLEAN, cost uint, health uint, attack uint, durability uint, race race_type) AS $$
 SELECT
@@ -156,6 +157,7 @@ FROM cards
 WHERE players.player_name = _player_name;
 $$ LANGUAGE 'sql';
 
+-- возращает все колоды игрока по его имени
 CREATE OR REPLACE FUNCTION gel_all_player_decks(_player_name nickname)
     RETURNS TABLE(deck_id INTEGER, deck_name TEXT, class TEXT) AS $$
 SELECT
@@ -168,6 +170,7 @@ FROM decks
 WHERE players.player_name = _player_name;
 $$ LANGUAGE 'sql';
 
+-- возвращает все карты, содержащиеся в колоде игрока
 CREATE OR REPLACE FUNCTION gel_all_deck_cards(_player_name nickname, _deck_name TEXT)
     RETURNS TABLE(quantity deck_qnt, card_id INTEGER, card_name TEXT, description TEXT, rarity rarity_type, type card_type, set TEXT, collectible BOOLEAN, cost uint, health uint, attack uint, durability uint, race race_type) AS $$
 SELECT
@@ -191,18 +194,15 @@ WHERE decks.player_id = get_player_id(_player_name) AND decks.deck_name = _deck_
 ORDER BY cards.cost ASC;
 $$ LANGUAGE 'sql';
 
+-- выдает информацию о игроке по его имени
 CREATE OR REPLACE FUNCTION get_player(_player_name nickname)
-    RETURNS TABLE(player_id INTEGER, rank rank_type, stars uint, money uint, dust uint) AS $$
-SELECT
-    players.player_id,
-    players.rank,
-    players.stars,
-    players.money,
-    players.dust
+    RETURNS TABLE(player_id INTEGER, player_name nickname, rank rank_type, stars uint, money uint, dust uint) AS $$
+SELECT *
 FROM players
 WHERE players.player_name = _player_name;
 $$ LANGUAGE 'sql';
 
+-- выдает список игроков, отсортированных по их текущему рангу и количеству звезд
 CREATE OR REPLACE FUNCTION get_rank_list()
     RETURNS TABLE(player_id INTEGER, player_name nickname, rank rank_type, stars uint) AS $$
 SELECT
