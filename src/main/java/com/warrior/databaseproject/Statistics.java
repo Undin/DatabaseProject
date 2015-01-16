@@ -5,7 +5,7 @@ package com.warrior.databaseproject;
  */
 public class Statistics {
 
-    public static final String HERO_STATISTICS_FIRST_LINE = "INSERT INTO hero_statistics(player_id, hero_id, hero_level, expr, wins) VALUES";
+    public static final String HERO_STATISTICS_FIRST_LINE = "INSERT INTO hero_statistics(player_id, hero_id, level, expr, wins) VALUES";
 
     private final Hero hero;
     private final int level;
