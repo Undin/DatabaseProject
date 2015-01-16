@@ -24,7 +24,11 @@ public class Utils {
     public static String toString(Object... objects) {
         return "(" + Arrays.stream(objects).map(o -> {
             if (o instanceof String) {
-                return toSqlString((String) o);
+                if (o.equals("NULL")) {
+                    return "NULL";
+                } else {
+                    return toSqlString((String) o);
+                }
             }
             return String.valueOf(o);
         }).collect(Collectors.joining(DELIMITER)) + ")";

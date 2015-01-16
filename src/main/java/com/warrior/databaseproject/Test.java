@@ -30,6 +30,10 @@ public class Test {
     public static final String STATISTICS_FILE = "statistics.txt";
     public static final String SQL_DIRECTORY = "./sql/";
     public static final String CARDS_FILE = "cards.sql";
+    public static final String MINIONS_FILE = "minions.sql";
+    public static final String WEAPONS_FILE = "weapons.sql";
+    public static final String SPELLS_FILE = "spells.sql";
+
     public static final String EFFECTS_FILE = "effects.sql";
     public static final String HEROES_FILE = "heroes.sql";
     public static final String HERO_CARDS_FILE = "hero_cards.sql";
@@ -61,6 +65,9 @@ public class Test {
         List<Card> cards = new ArrayList<>();
         List<Player> players = new ArrayList<>();
         List<Deck> decks = new ArrayList<>();
+        List<Minion> minions = new ArrayList<>();
+        List<Weapon> weapons = new ArrayList<>();
+        List<Spell> spells = new ArrayList<>();
 
 
         for (String effectName : EFFECTS) {
@@ -86,6 +93,18 @@ public class Test {
                 if (cardObject.has(TYPE) && TYPES.contains(cardObject.getString(TYPE)) && cardObject.has(RARITY) && cardObject.has(NAME) && cardObject.has(COST)) {
                     Card card = new Card(cardObject, setKey);
                     cards.add(card);
+
+                    switch (card.getType()) {
+                        case "Minion":
+                            minions.add(new Minion(card));
+                            break;
+                        case "Weapon":
+                            weapons.add(new Weapon(card));
+                            break;
+                        case "Spell":
+                            spells.add(new Spell(card));
+                            break;
+                    }
                     if (card.isCollectible()) {
                         cardNameToCollectibleCards.put(card.getName(), card);
                     }
@@ -139,6 +158,12 @@ public class Test {
         printInsertion(heroes, HEROES_FILE, Hero.HEROES_FIRST_LINE);
         // cards
         printInsertion(cards, CARDS_FILE, Card.INSERT_FIRST_LINE);
+        // minions
+        printInsertion(minions, MINIONS_FILE, Minion.INSERT_FIRST_LINE);
+        // weapons
+        printInsertion(weapons, WEAPONS_FILE, Weapon.INSERT_FIRST_LINE);
+        // spells
+        printInsertion(spells, SPELLS_FILE, Spell.INSERT_FIRST_LINE);
         // players
         printInsertion(players, PLAYERS_FILE, Player.PLAYERS_FIRST_LINE);
         // decks

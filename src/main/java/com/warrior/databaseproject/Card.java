@@ -10,7 +10,7 @@ import java.util.List;
  */
 public class Card implements Values {
 
-    public static final String INSERT_FIRST_LINE = "INSERT INTO cards (card_id, card_name, description, rarity, type, set, collectible, cost, health, attack, durability, race) VALUES";
+    public static final String INSERT_FIRST_LINE = "INSERT INTO cards (card_id, card_name, description, rarity, set, collectible, cost) VALUES";
 
     private static final String NAME = "name";
     private static final String TEXT = "text";
@@ -85,22 +85,37 @@ public class Card implements Values {
         StringBuilder builder = new StringBuilder();
         builder.append("(");
         builder.append(id).append(DELIMITER);
-        builder.append(getValue(object, NAME)).append(DELIMITER);
-        builder.append(getValue(object, TEXT)).append(DELIMITER);
-        builder.append(getValue(object, RARITY)).append(DELIMITER);
-        builder.append(getValue(object, TYPE)).append(DELIMITER);
+        builder.append(getSqlValue(object, NAME)).append(DELIMITER);
+        builder.append(getSqlValue(object, TEXT)).append(DELIMITER);
+        builder.append(getSqlValue(object, RARITY)).append(DELIMITER);
         builder.append(Utils.toSqlString(set)).append(DELIMITER);
         builder.append(object.optBoolean(COLLECTIBLE, false)).append(DELIMITER);
-        builder.append(getValue(object, COST)).append(DELIMITER);
-        builder.append(getValue(object, HEALTH)).append(DELIMITER);
-        builder.append(getValue(object, ATTACK)).append(DELIMITER);
-        builder.append(getValue(object, DURABILITY)).append(DELIMITER);
-        builder.append(getValue(object, RACE));
+        builder.append(getSqlValue(object, COST));
         builder.append(")");
         return builder.toString();
     }
 
-    private static String getValue(JSONObject object, String key) {
+    public int getDurability() {
+        return Integer.parseInt(getValue(object, DURABILITY));
+    }
+
+    public int getHealth() {
+        return Integer.parseInt(getValue(object, HEALTH));
+    }
+
+    public int getAttack() {
+        return Integer.parseInt(getValue(object, ATTACK));
+    }
+
+    public String getRace() {
+        return getValue(object, RACE);
+    }
+
+    public String getType() {
+        return getValue(object, TYPE);
+    }
+
+    private static String getSqlValue(JSONObject object, String key) {
         if (object.has(key)) {
             Object o = object.get(key);
             if (o instanceof String) {
@@ -108,6 +123,14 @@ public class Card implements Values {
             } else {
                 return o.toString();
             }
+        } else {
+            return "NULL";
+        }
+    }
+
+    private static String getValue(JSONObject object, String key) {
+        if (object.has(key)) {
+            return object.get(key).toString();
         } else {
             return "NULL";
         }
