@@ -1,3 +1,4 @@
+База данных для карточной игры Hearthstone.
 Версия базы данных - PostgreSQL 9.4.0
 
 models.pdf содержит ER и PD модели.
@@ -8,6 +9,9 @@ models.pdf содержит ER и PD модели.
     indexes.sql
     functions.sql
     cards.sql
+    minions.sql
+    weapons.sql
+    spells.sql
     effects.sql
     players.sql
     heroes.sql
