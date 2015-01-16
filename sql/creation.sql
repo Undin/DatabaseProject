@@ -83,13 +83,6 @@ CREATE VIEW minion_cards AS
     FROM cards
         NATURAL JOIN minions;
 
-CREATE VIEW all_cards AS
-    SELECT *
-    FROM cards
-        NATURAL FULL JOIN weapons
-        NATURAL FULL JOIN minions
-        NATURAL FULL JOIN spells;
-
 CREATE TABLE IF NOT EXISTS decks (
     deck_id   SERIAL PRIMARY KEY,
     deck_name TEXT    NOT NULL,
