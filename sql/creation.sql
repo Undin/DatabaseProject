@@ -4,10 +4,6 @@ CREATE TYPE rarity_type AS ENUM (
     'Rare',
     'Epic',
     'Legendary');
-CREATE TYPE card_type AS ENUM (
-    'Minion',
-    'Spell',
-    'Weapon');
 CREATE TYPE race_type AS ENUM (
     'Totem',
     'Demon',
@@ -50,15 +46,49 @@ CREATE TABLE IF NOT EXISTS cards (
     card_name   TEXT        NOT NULL,
     description TEXT,
     rarity      rarity_type NOT NULL,
-    type        card_type   NOT NULL,
     set         TEXT        NOT NULL,
     collectible BOOLEAN     NOT NULL DEFAULT TRUE,
-    cost        uint        NOT NULL,
-    health      uint,
-    attack      uint,
-    durability  uint,
-    race        race_type
+    cost        uint        NOT NULL
 );
+
+CREATE TABLE IF NOT EXISTS minions (
+    card_id INTEGER PRIMARY KEY REFERENCES cards ON DELETE CASCADE,
+    health  uint NOT NULL,
+    attack  uint NOT NULL,
+    race    race_type
+);
+
+CREATE TABLE IF NOT EXISTS weapons (
+    card_id    INTEGER PRIMARY KEY REFERENCES cards ON DELETE CASCADE,
+    attack     uint NOT NULL,
+    durability uint NOT NULL
+);
+
+CREATE TABLE IF NOT EXISTS spells (
+    card_id INTEGER PRIMARY KEY REFERENCES cards ON DELETE CASCADE
+);
+
+CREATE VIEW weapon_cards AS
+    SELECT *
+    FROM cards
+        NATURAL JOIN weapons;
+
+CREATE VIEW spell_cards AS
+    SELECT *
+    FROM cards
+        NATURAL JOIN spells;
+
+CREATE VIEW minion_cards AS
+    SELECT *
+    FROM cards
+        NATURAL JOIN minions;
+
+CREATE VIEW all_cards AS
+    SELECT *
+    FROM cards
+        NATURAL FULL JOIN weapons
+        NATURAL FULL JOIN minions
+        NATURAL FULL JOIN spells;
 
 CREATE TABLE IF NOT EXISTS decks (
     deck_id   SERIAL PRIMARY KEY,
@@ -94,11 +124,11 @@ CREATE TABLE IF NOT EXISTS in_deck (
 );
 
 CREATE TABLE hero_statistics (
-    player_id INTEGER NOT NULL REFERENCES players ON DELETE CASCADE,
-    hero_id   INTEGER NOT NULL REFERENCES heroes ON DELETE CASCADE,
+    player_id INTEGER    NOT NULL REFERENCES players ON DELETE CASCADE,
+    hero_id   INTEGER    NOT NULL REFERENCES heroes ON DELETE CASCADE,
     level     hero_level NOT NULL DEFAULT 1,
-    expr      uint    NOT NULL DEFAULT 0,
-    wins      uint    NOT NULL DEFAULT 0,
+    expr      uint       NOT NULL DEFAULT 0,
+    wins      uint       NOT NULL DEFAULT 0,
     PRIMARY KEY (player_id, hero_id)
 );
 
