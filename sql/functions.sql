@@ -136,21 +136,16 @@ $$ LANGUAGE 'plpgsql';
 
 -- возвращает все карты игрока по его имени
 CREATE OR REPLACE FUNCTION get_all_player_cards(_player_name nickname)
-    RETURNS TABLE(quantity qnt, card_id INTEGER, card_name TEXT, description TEXT, rarity rarity_type, type card_type, set TEXT, collectible BOOLEAN, cost uint, health uint, attack uint, durability uint, race race_type) AS $$
+    RETURNS TABLE(quantity qnt, card_id INTEGER, card_name TEXT, description TEXT, rarity rarity_type, set TEXT, collectible BOOLEAN, cost uint) AS $$
 SELECT
     has_card.quantity,
     cards.card_id,
     cards.card_name,
     cards.description,
     cards.rarity,
-    cards.type,
     cards.set,
     cards.collectible,
-    cards.cost,
-    cards.health,
-    cards.attack,
-    cards.durability,
-    cards.race
+    cards.cost
 FROM cards
     NATURAL JOIN has_card
     NATURAL JOIN players
@@ -172,21 +167,16 @@ $$ LANGUAGE 'sql';
 
 -- возвращает все карты, содержащиеся в колоде игрока
 CREATE OR REPLACE FUNCTION gel_all_deck_cards(_player_name nickname, _deck_name TEXT)
-    RETURNS TABLE(quantity deck_qnt, card_id INTEGER, card_name TEXT, description TEXT, rarity rarity_type, type card_type, set TEXT, collectible BOOLEAN, cost uint, health uint, attack uint, durability uint, race race_type) AS $$
+    RETURNS TABLE(quantity deck_qnt, card_id INTEGER, card_name TEXT, description TEXT, rarity rarity_type, set TEXT, collectible BOOLEAN, cost uint) AS $$
 SELECT
     in_deck.quantity,
     cards.card_id,
     cards.card_name,
     cards.description,
     cards.rarity,
-    cards.type,
     cards.set,
     cards.collectible,
-    cards.cost,
-    cards.health,
-    cards.attack,
-    cards.durability,
-    cards.race
+    cards.cost
 FROM cards
     NATURAL JOIN in_deck
     NATURAL JOIN decks
@@ -213,4 +203,5 @@ SELECT
 FROM players
 ORDER BY players.rank ASC, players.stars DESC;
 $$ LANGUAGE 'sql';
+
 

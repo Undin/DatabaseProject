@@ -2,8 +2,10 @@ CREATE INDEX card_name_index ON cards USING btree (card_name); -- hash
 CREATE INDEX card_rarity_index ON cards USING btree (rarity);
 CREATE INDEX card_cost_index ON cards USING btree (cost);
 CREATE INDEX card_set_index ON cards USING btree (set); -- hash
-CREATE INDEX card_race_index ON cards USING btree (race); -- hash
-CREATE INDEX card_type_index ON cards USING btree (type); -- hash
+
+CREATE INDEX minions_race_index ON minions USING btree (race); -- hash
+
+CREATE INDEX weapon_durability_index on weapons USING btree (durability);
 
 CREATE INDEX deck_name_index ON decks USING btree (deck_name); -- hash
 CREATE INDEX deck_hero_id_index ON decks USING btree (hero_id); -- hash
