@@ -11923,6 +11923,7 @@
             "rarity" : "Common",
             "cost" : 0,
             "health" : 2,
+            "attack" : 0,
             "text" : "Is something in this barrel?",
             "inPlayText" : "Breakable",
             "mechanics" : ["Deathrattle"]
